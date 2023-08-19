@@ -56,10 +56,8 @@ async fn server_upgrade(
 async fn main() -> Result<(), WebSocketError> {
   let addr = std::env::args().nth(1).unwrap_or_else(|| "127.0.0.1:8080".to_owned());
   let listener = TcpListener::bind(&addr).await?;
-  println!("Server started, listening on {addr}");
   loop {
     let (stream, _) = listener.accept().await?;
-    println!("Client connected");
     tokio::spawn(async move {
       let conn_fut = Http::new()
         .serve_connection(stream, service_fn(server_upgrade))
